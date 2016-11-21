@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+		"strictNullChecks": true,
+    //"alwaysStrict": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "es6",
+		"target": "es6",
+		"sourceMap": true,
+		"rootDir": "src/",
+		"outDir": "out/"
+	},
+  "exclude": [
+    "node_modules",
+    "out"
+  ]
+}
