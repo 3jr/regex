@@ -38,18 +38,22 @@ module Nfa {
 
 }
 
-let success = test([{
+// a? =^= (|a)
+// a+ =^= aa*
+// a
+
+test([{
   regex: 'a(b|c)d*',
   shouldMatch: ['acd', 'abd', 'acdddd', 'abdddd', 'ac', 'ab'],
   shouldFail: ['a', 'bab', 'abc', '', 'adc'],
 }, {
-  regex: '(|a)',
-  shouldMatch: ['a', ''],
-  shouldFail: ['aa', 'b'],
-}, {
   regex: '(|a)(b|c*)',
   shouldMatch: ['ab', 'a', '', 'b', 'cccccc', 'c', 'cc', 'ac', 'accc'],
   shouldFail: ['aa', 'abb', 'abc', 'bc', 'ca'],
+}, {
+  regex: '(a|b)*(|bc)',
+  shouldMatch: ['a', 'abab', 'aaabbb', '', 'bc', 'ababbc', 'aabbc'],
+  shouldFail: ['ac', 'abac', 'cb'],
 }]);
 
 
