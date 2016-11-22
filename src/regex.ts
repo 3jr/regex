@@ -57,7 +57,7 @@ test([{
 }]);
 
 
-function test(values: { regex: string, shouldMatch: string[], shouldFail: string[] }[]): boolean {
+function test(values: Array<{ regex: string, shouldMatch: Array<string>, shouldFail: Array<string> }>): boolean {
   let success = true;
   for (let testCase of values) {
     let ast = parse(testCase.regex);
@@ -80,7 +80,7 @@ function test(values: { regex: string, shouldMatch: string[], shouldFail: string
   return success;
 }
 
-function parse(s: string) {
+function parse(s: string): Ast.Node {
   s = s + ')';
   let [lastPosition, node] = p(0);
   if (lastPosition !== s.length - 1) {
@@ -222,13 +222,13 @@ function match(startNode: Nfa.Node, str: string): boolean {
   }
 }
 
-function* zip<T, U>(seq1: T[], seq2: U[]): IterableIterator<[T, U]> {
+function* zip<T, U>(seq1: Array<T>, seq2: Array<U>): IterableIterator<[T, U]> {
   for (let i = 0; i < seq1.length && i < seq2.length; i++) {
     yield [seq1[i], seq2[i]];
   }
 }
 
-function range(end: number): number[] {
+function range(end: number): Array<number> {
   let res = new Array<number>();
   for (let i = 0; i < end; i++) {
     res.push(i);
