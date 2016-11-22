@@ -38,25 +38,43 @@ module Nfa {
 
 }
 
-let ast = parse('a(b|c)d*');
-let nfa = makeNfa(ast);
+let success = test([{
+  regex: 'a(b|c)d*',
+  shouldMatch: ['acd', 'abd', 'acdddd', 'abdddd', 'ac', 'ab'],
+  shouldFail: ['a', 'bab', 'abc', '', 'adc'],
+}, {
+  regex: '(|a)',
+  shouldMatch: ['a', ''],
+  shouldFail: ['aa', 'b'],
+}, {
+  regex: '(|a)(b|c*)',
+  shouldMatch: ['ab', 'a', '', 'b', 'cccccc', 'c', 'cc', 'ac', 'accc'],
+  shouldFail: ['aa', 'abb', 'abc', 'bc', 'ca'],
+}]);
 
-console.log("should match");
-console.log(match(nfa, 'acd'));
-console.log(match(nfa, 'abd'));
-console.log(match(nfa, 'acdddd'));
-console.log(match(nfa, 'abdddd'));
-console.log(match(nfa, 'ac'));
-console.log(match(nfa, 'ab'));
 
-console.log();
+function test(values: { regex: string, shouldMatch: string[], shouldFail: string[] }[]): boolean {
+  let success = true;
+  for (let testCase of values) {
+    let ast = parse(testCase.regex);
+    let nfa = makeNfa(ast);
 
-console.log("should not match");
-console.log(match(nfa, 'a'));
-console.log(match(nfa, 'bab'));
-console.log(match(nfa, 'abc'));
-console.log(match(nfa, ''));
-console.log(match(nfa, 'adc'));
+    for (let v of testCase.shouldMatch) {
+      if (!match(nfa, v)) {
+        console.log(`Failed: "${v}" should match "${testCase.regex}"`);
+        success = false;
+      }
+    }
+    for (let v of testCase.shouldFail) {
+      if (match(nfa, v)) {
+        console.log(`Failed: "${v}" should NOT match "${testCase.regex}"`);
+        success = false;
+      }
+    }
+  }
+  console.log(success ? 'All tests succeeded' : 'Some tests failed');
+  return success;
+}
 
 function parse(s: string) {
   s = s + ')';
