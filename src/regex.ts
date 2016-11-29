@@ -38,10 +38,6 @@ module Nfa {
 
 }
 
-// a? =^= (|a)
-// a+ =^= aa*
-// a
-
 test([{
   regex: 'a(b|c)d*',
   shouldMatch: ['acd', 'abd', 'acdddd', 'abdddd', 'ac', 'ab'],
